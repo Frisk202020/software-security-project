@@ -15,6 +15,7 @@ contract Taxpayer {
   uint constant  DEFAULT_ALLOWANCE = 5000; // Constant default income tax allowance
   uint constant ALLOWANCE_OAP = 7000; // Constant income tax allowance for Older Taxpayers over 65
   uint tax_allowance; // Income tax allowance
+  uint default_allowance;
   uint income; 
   uint256 rev;
 
@@ -27,6 +28,7 @@ contract Taxpayer {
     spouse = address(0);
     income = 0;
     tax_allowance = DEFAULT_ALLOWANCE;
+    default_allowance = DEFAULT_ALLOWANCE;
     iscontract = true;
   } 
 
@@ -51,6 +53,7 @@ contract Taxpayer {
 
   function haveBirthday() public {
     age++;
+    if (age == 65) { default_allowance == ALLOWANCE_OAP; } // Actually fuzzer did not notice this error
   }
  
   function setTaxAllowance(uint ta) public {
@@ -59,6 +62,11 @@ contract Taxpayer {
   }
   function getTaxAllowance() public view returns(uint) {
     return tax_allowance;
+  }
+
+  // Taxpayer(NULL) is casted to 0
+  function getDefaultAllowance() public view returns (uint) {
+    return default_allowance;
   }
   function getSpouse() public view returns (address) {
     return spouse;

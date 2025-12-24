@@ -6,6 +6,10 @@ import "./Taxpayer.sol";
 contract FuzzTaxpayer is Taxpayer {
     constructor() Taxpayer(address(0), address(0)) {}
 
+    /*******
+        PART 1
+    ********/
+
     // If person is married to someeone, that someone mustn't be NULL address
     function echidna_check_spouse_exists() public view returns (bool) {
         return (!isMarried || isMarried && spouse != address(0)); 
@@ -33,5 +37,19 @@ contract FuzzTaxpayer is Taxpayer {
 
     function echidna_bidirectional_marriage() public view returns (bool) {
         return (!isMarried || getSpouse() == address(this));
+    }
+
+    /*******
+        PART 2
+    ********/
+
+    function echidna_default_allowance() public view returns (bool) {
+        return (age < 65 && default_allowance == DEFAULT_ALLOWANCE || age >= 65 && default_allowance == ALLOWANCE_OAP);
+    }
+
+    // Taxpayer(NULL).tax_allowance is casted to 0
+    function echidna_tax_allowance_sum() public view returns (bool) {
+        Taxpayer spouse = Taxpayer(spouse);
+        return (getTaxAllowance() + spouse.getTaxAllowance() == getDefaultAllowance() + spouse.getDefaultAllowance());
     }
 }
