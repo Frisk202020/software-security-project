@@ -32,6 +32,7 @@ contract Taxpayer {
 
   // We require new_spouse != address(0);
   function marry(address new_spouse) public {
+    require(new_spouse != address(0));
     spouse = new_spouse;
     isMarried = true;
   }
