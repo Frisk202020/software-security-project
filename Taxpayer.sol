@@ -32,7 +32,7 @@ contract Taxpayer {
 
   // We require new_spouse != address(0);
   function marry(address new_spouse) public {
-    require(new_spouse != address(0));
+    require(new_spouse != address(0)); require(Taxpayer(new_spouse).isContract());
     spouse = new_spouse;
     isMarried = true;
   }
@@ -59,6 +59,9 @@ contract Taxpayer {
   }
   function getTaxAllowance() public view returns(uint) {
     return tax_allowance;
+  }
+  function getSpouse() public view returns (address) {
+    return spouse;
   }
   function isContract() public view returns(bool){
     return iscontract;

@@ -26,4 +26,12 @@ contract FuzzTaxpayer is Taxpayer {
         address void = address(0);
         return ((parent1 == void || Taxpayer(parent1).isContract()) && (parent2 == void || Taxpayer(parent2).isContract()));
     }
+
+    function echidna_spouse_is_taxpayer() public view returns (bool) {
+        return (!isMarried || Taxpayer(spouse).isContract());
+    }
+
+    function echidna_bidirectional_marriage() public view returns (bool) {
+        return (!isMarried || getSpouse() == address(this));
+    }
 }
