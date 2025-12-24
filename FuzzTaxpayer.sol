@@ -11,6 +11,11 @@ contract FuzzTaxpayer is Taxpayer {
         return (!isMarried || isMarried && spouse != address(0)); 
     }
 
+    // If person is single, they shoudn't have a spouse
+    function echidna_single_spouse_is_null() public view returns (bool) {
+        return (isMarried || spouse == address(0));
+    }
+
     // isContract should always be true
     function echidna_is_contract() public view returns (bool) {
         return (iscontract);
