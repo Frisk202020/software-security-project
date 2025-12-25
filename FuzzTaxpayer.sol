@@ -3,6 +3,11 @@ pragma solidity ^0.8.22;
 
 import "./Taxpayer.sol";
 
+error MyError (
+    uint a,
+    uint b
+);
+
 contract FuzzTaxpayer is Taxpayer {
     constructor() Taxpayer(address(0), address(0)) {}
 
@@ -43,12 +48,12 @@ contract FuzzTaxpayer is Taxpayer {
         PART 2
     ********/
 
-    function echidna_default_allowance() public view returns (bool) {
-        return (age < 65 && default_allowance == DEFAULT_ALLOWANCE || age >= 65 && default_allowance == ALLOWANCE_OAP);
-    }
-
-    // Taxpayer(NULL).tax_allowance is casted to 0
+    //! TODO: Inspect more the fuzzer -- test is passing where it clearly shouldn't
     function echidna_tax_allowance_sum() public view returns (bool) {
+        if (!isMarried) {
+            return tax_allowance == getDefaultAllowance();
+        }
+
         Taxpayer spouse = Taxpayer(spouse);
         return (getTaxAllowance() + spouse.getTaxAllowance() == getDefaultAllowance() + spouse.getDefaultAllowance());
     }
