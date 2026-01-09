@@ -40,10 +40,12 @@ contract Taxpayer {
   function marry(address new_spouse) public {
     require(new_spouse != address(0)); require(Taxpayer(new_spouse).isContract());
     require(new_spouse != address(this));
+    Taxpayer s = Taxpayer(spouse);
+    address s_spouse = s.getSpouse();
+    require(s_spouse == address(0) || s_spouse == address(this));
 
     spouse = new_spouse;
     ismarried = true;
-    Taxpayer s = Taxpayer(spouse);
     if (!s.isMarried()) {
       s.marry(address(this));
     }
